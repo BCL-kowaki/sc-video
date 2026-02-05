@@ -33,7 +33,7 @@ export default function VideoCard({ video }: VideoCardProps) {
     <Link href={`/watch/${video.id}/`} className="block video-card">
       <div className="group cursor-pointer">
         {/* Thumbnail */}
-        <div className="relative aspect-video rounded-xl overflow-hidden bg-[var(--card-bg)]">
+        <div className="relative aspect-video rounded-[5px] overflow-hidden bg-[var(--card-bg)]">
           {!imageError ? (
             <Image
               src={video.thumbnail}

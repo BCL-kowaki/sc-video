@@ -166,7 +166,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   return (
     <div
       ref={containerRef}
-      className="relative bg-black aspect-video w-full rounded-xl overflow-hidden group"
+      className="relative bg-black aspect-video w-full rounded-[5px] overflow-hidden group"
       onMouseMove={handleMouseMove}
       onMouseLeave={() => isPlaying && setShowControls(false)}
     >

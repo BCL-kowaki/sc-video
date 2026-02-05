@@ -16,7 +16,7 @@ export default function RelatedVideoCard({ video }: RelatedVideoCardProps) {
     <Link href={`/watch/${video.id}/`} className="block group">
       <div className="flex gap-2">
         {/* Thumbnail */}
-        <div className="relative w-40 shrink-0 aspect-video rounded-lg overflow-hidden bg-[var(--card-bg)]">
+        <div className="relative w-40 shrink-0 aspect-video rounded-[5px] overflow-hidden bg-[var(--card-bg)]">
           {!imageError ? (
             <Image
               src={video.thumbnail}
