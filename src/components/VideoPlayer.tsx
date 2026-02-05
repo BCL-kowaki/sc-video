@@ -141,36 +141,63 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     };
   }, []);
 
-  // スマホフルスクリーン時: 指で画面が動かないように touchmove を抑制（シークバー・ボタンは除外）
+  // スマホフルスクリーン時: 指で画面が動かないように touchmove を完全に抑制（シークバー・ボタンは除外）
   const preventTouchMove = (e: React.TouchEvent) => {
     if (!isMobile || !isFullscreen) return;
     const target = e.target as Node;
     if (target instanceof Element && (target.closest("button") || target.closest('input[type="range"]'))) return;
     e.preventDefault();
   };
+
   useEffect(() => {
     if (!isMobile || !isFullscreen) return;
-    const video = videoRef.current;
-    const container = containerRef.current;
-    if (video) {
-      video.style.touchAction = "none";
-      const onTouchMove = (e: TouchEvent) => {
-        const target = e.target as Node;
-        if (target instanceof Element && (target.closest("button") || target.closest('input[type="range"]'))) return;
-        e.preventDefault();
-      };
-      video.addEventListener("touchmove", onTouchMove, { passive: false });
-      return () => {
-        video.style.touchAction = "";
-        video.removeEventListener("touchmove", onTouchMove);
-      };
+
+    const isControl = (target: EventTarget | null) => {
+      if (!target || !(target instanceof Element)) return false;
+      return !!(target.closest("button") || target.closest('input[type="range"]'));
+    };
+
+    const onTouchMove = (e: Event) => {
+      if (isControl((e as TouchEvent).target)) return;
+      e.preventDefault();
+    };
+
+    const doc = document;
+    const body = doc.body;
+    const fullscreenEl = (doc.fullscreenElement ?? (doc as Document & { webkitFullscreenElement?: Element }).webkitFullscreenElement) ?? null;
+
+    // 1) document でキャプチャ phase で touchmove を止める（video より先に取得）
+    doc.addEventListener("touchmove", onTouchMove, { capture: true, passive: false });
+
+    // 2) フルスクリーン要素自体にも touch-action と listener
+    if (fullscreenEl) {
+      (fullscreenEl as HTMLElement).style.touchAction = "none";
+      (fullscreenEl as HTMLElement).style.overflow = "hidden";
+      fullscreenEl.addEventListener("touchmove", onTouchMove, { passive: false });
     }
-    if (container) {
-      container.style.touchAction = "none";
-      return () => {
-        container.style.touchAction = "";
-      };
-    }
+
+    // 3) body を固定して背景が動かないようにする
+    const prevOverflow = body.style.overflow;
+    const prevPosition = body.style.position;
+    const prevWidth = body.style.width;
+    const prevTouchAction = body.style.touchAction;
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.width = "100%";
+    body.style.touchAction = "none";
+
+    return () => {
+      doc.removeEventListener("touchmove", onTouchMove, { capture: true });
+      if (fullscreenEl) {
+        (fullscreenEl as HTMLElement).style.touchAction = "";
+        (fullscreenEl as HTMLElement).style.overflow = "";
+        fullscreenEl.removeEventListener("touchmove", onTouchMove);
+      }
+      body.style.overflow = prevOverflow;
+      body.style.position = prevPosition;
+      body.style.width = prevWidth;
+      body.style.touchAction = prevTouchAction;
+    };
   }, [isMobile, isFullscreen]);
 
   // Keyboard shortcuts
@@ -231,7 +258,15 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     <div
       ref={containerRef}
       className="relative bg-black aspect-video w-full rounded-[5px] overflow-hidden group"
-      style={isMobile && isFullscreen ? { touchAction: "none" } : undefined}
+      style={
+        isMobile && isFullscreen
+          ? {
+              touchAction: "none",
+              WebkitTouchCallout: "none",
+              userSelect: "none",
+            }
+          : undefined
+      }
       onMouseMove={handleMouseMove}
       onMouseLeave={() => isPlaying && setShowControls(false)}
       onTouchStart={handleTouchStart}
@@ -269,6 +304,20 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         <source src={src} type="video/mp4" />
         お使いのブラウザは動画再生に対応していません。
       </video>
+
+      {/* スマホフルスクリーン時のみ: 動画エリアの touchmove をキャッチして画面が動かないようにするオーバーレイ（コントロールは z-20 で上にある） */}
+      {isMobile && isFullscreen && (
+        <div
+          className="absolute inset-0 z-[15] touch-none"
+          style={{ touchAction: "none" }}
+          onTouchMove={preventTouchMove}
+          onClick={() => {
+            if (!showControls) setShowControls(true);
+            else togglePlay();
+          }}
+          aria-hidden
+        />
+      )}
 
       {/* Loading Spinner */}
       {isLoading && !error && (
