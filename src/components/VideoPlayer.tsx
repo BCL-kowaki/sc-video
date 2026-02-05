@@ -36,33 +36,42 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  // Handle play/pause（スマホでは再生開始時に自動フルスクリーン）
+  // Handle play/pause（フルスクリーンは拡大ボタンのみ。スマホでは再生開始でコントローラーを消す）
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-        if (isMobile && containerRef.current?.requestFullscreen) {
-          containerRef.current.requestFullscreen().catch(() => {});
-        }
+    const video = videoRef.current;
+    if (!video) return;
+    if (isPlaying) {
+      video.pause();
+    } else {
+      video.play();
+      if (isMobile) {
+        setShowControls(true);
+        controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 2500);
       }
-      setIsPlaying(!isPlaying);
     }
+    setIsPlaying(!isPlaying);
   };
 
-  // Handle fullscreen
+  // Handle fullscreen（iOSは video.webkitEnterFullscreen を使用）
   const toggleFullscreen = () => {
-    if (!containerRef.current) return;
+    const video = videoRef.current;
+    const container = containerRef.current;
+    if (!container) return;
 
     if (!isFullscreen) {
-      if (containerRef.current.requestFullscreen) {
-        containerRef.current.requestFullscreen();
+      // iOS: 動画要素のネイティブフルスクリーン
+      const v = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+      if (isMobile && v?.webkitEnterFullscreen) {
+        v.webkitEnterFullscreen();
+        return;
+      }
+      if (container.requestFullscreen) {
+        container.requestFullscreen().catch(() => {});
       }
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
+      const d = document as Document & { webkitExitFullscreen?: () => void };
+      if (d.webkitExitFullscreen) d.webkitExitFullscreen();
+      else if (document.exitFullscreen) document.exitFullscreen();
     }
   };
 
@@ -93,22 +102,23 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     }
   };
 
-  // Show/hide controls on mouse movement（スマホではタッチで表示・非PCでは自動で隠さない）
+  // Show/hide controls（PC: マウスで表示、再生中は3秒で非表示 / スマホ: タップで表示、再生中は2.5秒で非表示）
   const handleMouseMove = () => {
     setShowControls(true);
-    if (controlsTimeoutRef.current) {
-      clearTimeout(controlsTimeoutRef.current);
-    }
-    if (isPlaying && !isMobile) {
-      controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
+    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+    if (isPlaying) {
+      controlsTimeoutRef.current = setTimeout(
+        () => setShowControls(false),
+        isMobile ? 2500 : 3000
+      );
     }
   };
 
   const handleTouchStart = () => {
     setShowControls(true);
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
-    if (isPlaying && !isMobile) {
-      controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
+    if (isPlaying) {
+      controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 2500);
     }
   };
 
@@ -116,15 +126,18 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     setIsMobile(isMobileDevice());
   }, []);
 
-  // Update fullscreen state
+  // Update fullscreen state（標準 + iOS webkit）
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const doc = document as Document & { webkitFullscreenElement?: Element };
+      setIsFullscreen(!!(document.fullscreenElement ?? doc.webkitFullscreenElement));
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
     };
   }, []);
 
@@ -187,23 +200,33 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
       ref={containerRef}
       className="relative bg-black aspect-video w-full rounded-[5px] overflow-hidden group"
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => isPlaying && !isMobile && setShowControls(false)}
+      onMouseLeave={() => isPlaying && setShowControls(false)}
       onTouchStart={handleTouchStart}
     >
-      {/* Video Element - High Quality Settings */}
+      {/* Video Element - z-0 でコントロールの下に固定（iOSで前面に出るのを防ぐ） */}
       <video
         ref={videoRef}
         src={src}
         poster={poster}
-        className="w-full h-full object-contain"
-        onClick={togglePlay}
+        className="relative z-0 w-full h-full object-contain"
+        onClick={() => {
+          if (!showControls) setShowControls(true);
+          else togglePlay();
+        }}
         onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime || 0)}
         onLoadedMetadata={() => {
           setDuration(videoRef.current?.duration || 0);
           setIsLoading(false);
         }}
         onWaiting={() => setIsLoading(true)}
-        onPlaying={() => setIsLoading(false)}
+        onPlaying={() => {
+          setIsLoading(false);
+          if (isMobile) {
+            setShowControls(true);
+            if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+            controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 2500);
+          }
+        }}
         onEnded={() => setIsPlaying(false)}
         onError={() => setError(true)}
         preload="metadata"
@@ -215,14 +238,14 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
 
       {/* Loading Spinner */}
       {isLoading && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50">
           <div className="w-12 h-12 border-4 border-[#B88F3A] border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
       {/* Error State */}
       {error && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-16 w-16 text-[var(--secondary-text)] mb-4"
@@ -244,7 +267,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
       {/* Play Button Overlay */}
       {!isPlaying && !error && (
         <div
-          className="absolute inset-0 flex items-center justify-center cursor-pointer touch-manipulation"
+          className="absolute inset-0 z-10 flex items-center justify-center cursor-pointer touch-manipulation"
           onClick={(e) => { e.preventDefault(); togglePlay(); }}
         >
           <div className="w-14 h-14 bg-gradient-to-br from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] rounded-full flex items-center justify-center hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-500 ease-in-out shadow-md">
@@ -260,44 +283,26 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         </div>
       )}
 
-      {/* Controls - スマホでタッチ可能に（pointer-events と 十分なタッチ領域） */}
+      {/* Controls - YouTube風: 下部に固定。スマホは再生ボタン行の下にシークバー・パディング詰め */}
       <div
-        className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-3 md:p-4 transition-opacity duration-300 ${
+        className={`absolute left-0 right-0 z-20 flex flex-col justify-end bg-gradient-to-t from-black/90 to-transparent px-1.5 py-0.5 md:px-3 md:py-3 transition-opacity duration-300 isolate ${
           showControls ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
+        style={{ top: "auto", bottom: 0, transform: "translateZ(0)" }}
       >
-        {/* Progress Bar - タッチで操作しやすい高さ */}
-        <div className="flex items-center mb-2 md:mb-3 min-h-[44px] py-2">
-          <input
-            type="range"
-            min={0}
-            max={duration || 100}
-            value={currentTime}
-            onChange={handleSeek}
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={(e) => e.stopPropagation()}
-            className="w-full h-2 md:h-1 bg-gray-600 rounded-full appearance-none cursor-pointer touch-manipulation min-h-[24px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-[#B88F3A] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:touch-manipulation md:[&::-webkit-slider-thumb]:w-3 md:[&::-webkit-slider-thumb]:h-3 hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
-            style={{
-              background: `linear-gradient(to right, #B88F3A ${
-                (currentTime / (duration || 1)) * 100
-              }%, #4b5563 ${(currentTime / (duration || 1)) * 100}%)`,
-            }}
-          />
-        </div>
-
-        {/* Control Buttons - 最小44pxタッチ領域 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 md:gap-4">
+        {/* ボタン1行（上） - スマホ: 余白詰め [再生][音量][時間][拡大] */}
+        <div className="flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-1 md:gap-4">
             {/* Play/Pause */}
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); togglePlay(); }}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
+              className="min-w-[40px] min-h-[40px] md:min-w-[44px] md:min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
             >
               {isPlaying ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7"
+                  className="h-6 w-6 md:h-7 md:w-7"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -306,7 +311,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-7 w-7"
+                  className="h-6 w-6 md:h-7 md:w-7"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -315,17 +320,17 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
               )}
             </button>
 
-            {/* Volume */}
+            {/* Volume - スマホはアイコンのみ、PCはスライダーも */}
             <div className="flex items-center gap-1 md:gap-2">
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); toggleMute(); }}
-                className="min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
+                className="min-w-[40px] min-h-[40px] md:min-w-[44px] md:min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
               >
                 {isMuted || volume === 0 ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-5 w-5 md:h-6 md:w-6"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -334,7 +339,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
                 ) : volume < 0.5 ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-5 w-5 md:h-6 md:w-6"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -343,7 +348,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-5 w-5 md:h-6 md:w-6"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -359,27 +364,28 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
                 onClick={(e) => e.stopPropagation()}
-                className="w-16 md:w-20 h-2 md:h-1 bg-gray-600 rounded-full appearance-none cursor-pointer touch-manipulation min-h-[24px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer md:[&::-webkit-slider-thumb]:w-3 md:[&::-webkit-slider-thumb]:h-3"
+                className="hidden md:block w-20 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer"
               />
             </div>
 
             {/* Time */}
-            <span className="text-white text-sm">
+            <span className="text-white text-xs md:text-sm tabular-nums">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-4">
-            {/* Fullscreen - スマホでもタッチで拡大 */}
+          <div className="flex items-center">
+            {/* 拡大 = フルスクリーン（スマホでタップでフル画面） */}
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
-              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
+              className="min-w-[40px] min-h-[40px] md:min-w-[44px] md:min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
+              aria-label="フルスクリーン"
             >
               {isFullscreen ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
+                  className="h-5 w-5 md:h-6 md:w-6"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -388,7 +394,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
               ) : (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
+                  className="h-5 w-5 md:h-6 md:w-6"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -397,6 +403,25 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
               )}
             </button>
           </div>
+        </div>
+
+        {/* シークバー（ボタンの下に配置・スマホで余白詰め） */}
+        <div className="flex items-center w-full px-0.5 pt-0.5 pb-0.5 md:pt-1 md:pb-1 min-h-[24px] md:min-h-[24px] shrink-0">
+          <input
+            type="range"
+            min={0}
+            max={duration || 100}
+            value={currentTime}
+            onChange={handleSeek}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full h-1.5 md:h-1 bg-gray-600 rounded-full appearance-none cursor-pointer touch-manipulation [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:touch-manipulation hover:[&::-webkit-slider-thumb]:scale-110 transition-transform"
+            style={{
+              background: `linear-gradient(to right, #B88F3A ${
+                (currentTime / (duration || 1)) * 100
+              }%, #4b5563 ${(currentTime / (duration || 1)) * 100}%)`,
+            }}
+          />
         </div>
       </div>
     </div>
