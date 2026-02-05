@@ -8,6 +8,11 @@ interface VideoPlayerProps {
   title: string;
 }
 
+function isMobileDevice() {
+  if (typeof window === "undefined") return false;
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+}
+
 export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,6 +25,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   const [showControls, setShowControls] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Format time (seconds to MM:SS)
@@ -30,13 +36,16 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  // Handle play/pause
+  // Handle play/pause（スマホでは再生開始時に自動フルスクリーン）
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
         videoRef.current.play();
+        if (isMobile && containerRef.current?.requestFullscreen) {
+          containerRef.current.requestFullscreen().catch(() => {});
+        }
       }
       setIsPlaying(!isPlaying);
     }
@@ -84,18 +93,28 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     }
   };
 
-  // Show/hide controls on mouse movement
+  // Show/hide controls on mouse movement（スマホではタッチで表示・非PCでは自動で隠さない）
   const handleMouseMove = () => {
     setShowControls(true);
     if (controlsTimeoutRef.current) {
       clearTimeout(controlsTimeoutRef.current);
     }
-    if (isPlaying) {
-      controlsTimeoutRef.current = setTimeout(() => {
-        setShowControls(false);
-      }, 3000);
+    if (isPlaying && !isMobile) {
+      controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
     }
   };
+
+  const handleTouchStart = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+    if (isPlaying && !isMobile) {
+      controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
+    }
+  };
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   // Update fullscreen state
   useEffect(() => {
@@ -168,7 +187,8 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
       ref={containerRef}
       className="relative bg-black aspect-video w-full rounded-[5px] overflow-hidden group"
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => isPlaying && setShowControls(false)}
+      onMouseLeave={() => isPlaying && !isMobile && setShowControls(false)}
+      onTouchStart={handleTouchStart}
     >
       {/* Video Element - High Quality Settings */}
       <video
@@ -224,8 +244,8 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
       {/* Play Button Overlay */}
       {!isPlaying && !error && (
         <div
-          className="absolute inset-0 flex items-center justify-center cursor-pointer"
-          onClick={togglePlay}
+          className="absolute inset-0 flex items-center justify-center cursor-pointer touch-manipulation"
+          onClick={(e) => { e.preventDefault(); togglePlay(); }}
         >
           <div className="w-14 h-14 bg-gradient-to-br from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] rounded-full flex items-center justify-center hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-500 ease-in-out shadow-md">
             <svg
@@ -240,21 +260,23 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         </div>
       )}
 
-      {/* Controls */}
+      {/* Controls - スマホでタッチ可能に（pointer-events と 十分なタッチ領域） */}
       <div
-        className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 transition-opacity duration-300 ${
-          showControls ? "opacity-100" : "opacity-0"
+        className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-3 md:p-4 transition-opacity duration-300 ${
+          showControls ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Progress Bar */}
-        <div className="flex items-center mb-3">
+        {/* Progress Bar - タッチで操作しやすい高さ */}
+        <div className="flex items-center mb-2 md:mb-3 min-h-[44px] py-2">
           <input
             type="range"
             min={0}
             max={duration || 100}
             value={currentTime}
             onChange={handleSeek}
-            className="w-full h-1 bg-gray-600 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#B88F3A] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full h-2 md:h-1 bg-gray-600 rounded-full appearance-none cursor-pointer touch-manipulation min-h-[24px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:bg-[#B88F3A] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:touch-manipulation md:[&::-webkit-slider-thumb]:w-3 md:[&::-webkit-slider-thumb]:h-3 hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
             style={{
               background: `linear-gradient(to right, #B88F3A ${
                 (currentTime / (duration || 1)) * 100
@@ -263,13 +285,14 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
           />
         </div>
 
-        {/* Control Buttons */}
+        {/* Control Buttons - 最小44pxタッチ領域 */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {/* Play/Pause */}
             <button
-              onClick={togglePlay}
-              className="text-white hover:text-[#B88F3A] transition-colors duration-300"
+              type="button"
+              onClick={(e) => { e.stopPropagation(); togglePlay(); }}
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
             >
               {isPlaying ? (
                 <svg
@@ -293,10 +316,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             </button>
 
             {/* Volume */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 md:gap-2">
               <button
-                onClick={toggleMute}
-                className="text-white hover:text-[#B88F3A] transition-colors duration-300"
+                type="button"
+                onClick={(e) => { e.stopPropagation(); toggleMute(); }}
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
               >
                 {isMuted || volume === 0 ? (
                   <svg
@@ -334,7 +358,8 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
                 step={0.1}
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
-                className="w-20 h-1 bg-gray-600 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
+                className="w-16 md:w-20 h-2 md:h-1 bg-gray-600 rounded-full appearance-none cursor-pointer touch-manipulation min-h-[24px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer md:[&::-webkit-slider-thumb]:w-3 md:[&::-webkit-slider-thumb]:h-3"
               />
             </div>
 
@@ -344,11 +369,12 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Fullscreen */}
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Fullscreen - スマホでもタッチで拡大 */}
             <button
-              onClick={toggleFullscreen}
-              className="text-white hover:text-[#B88F3A] transition-colors duration-300"
+              type="button"
+              onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center text-white hover:text-[#B88F3A] transition-colors duration-300 touch-manipulation"
             >
               {isFullscreen ? (
                 <svg
