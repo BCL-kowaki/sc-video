@@ -51,7 +51,7 @@ export default function RelatedVideoCard({ video }: RelatedVideoCardProps) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h4 className="text-white text-sm font-medium line-clamp-2 group-hover:text-[#F2C84B] transition-colors">
+          <h4 className="text-white text-sm font-medium line-clamp-2 group-hover:text-[#B88F3A] transition-colors">
             {video.title}
           </h4>
           <p className="text-[var(--secondary-text)] text-xs mt-1">

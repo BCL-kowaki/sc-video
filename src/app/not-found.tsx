@@ -24,7 +24,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A68114] via-[#D9A441] to-[#F2BA52] text-black rounded-full font-medium hover:from-[#BF9A2A] hover:via-[#F2C84B] hover:to-[#F2BA52] transition-all"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] text-white rounded-full font-medium hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-500 ease-in-out"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

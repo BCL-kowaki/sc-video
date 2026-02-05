@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
+  /* ダークベース - マットな黒（画像参考 #2F2E2C 系） */
+  --background: #2a2927;
   --foreground: #f1f1f1;
-  --card-bg: #141414;
-  --card-hover: #1f1f1f;
-  --border-color: #2a2a2a;
-  /* Gold palette from image */
-  --gold-dark: #A68114;
-  --gold-mid: #BF9A2A;
-  --gold-bright: #F2C84B;
-  --gold-warm: #D9A441;
-  --gold-light: #F2BA52;
-  --primary-gold: #D9A441;
-  --primary-gold-hover: #BF9A2A;
+  --card-bg: #2F2E2C;
+  --card-hover: #383734;
+  --border-color: #3d3c3a;
+  /* Gold - 画像の落ち着いたゴールド（#B88F3A, #C69D4C 系） */
+  --gold-dark: #8B6910;
+  --gold-mid: #9A7B2E;
+  --gold-bright: #B88F3A;
+  --gold-muted: #C69D4C;
+  --primary-gold: #9A7B2E;
+  --primary-gold-hover: #B88F3A;
   --secondary-text: #888888;
-  --header-bg: #0a0a0a;
-  /* Gradient */
-  --gold-gradient: linear-gradient(135deg, #A68114 0%, #BF9A2A 25%, #F2C84B 50%, #D9A441 75%, #F2BA52 100%);
-  --gold-gradient-hover: linear-gradient(135deg, #BF9A2A 0%, #D9A441 50%, #F2C84B 100%);
+  --header-bg: #2a2927;
+  /* Button gradient - 重厚・マットなゴールド・ホバーで反転 */
+  --gold-gradient: linear-gradient(135deg, #8B6910 0%, #9A7B2E 50%, #B88F3A 100%);
+  --gold-gradient-hover: linear-gradient(135deg, #B88F3A 0%, #9A7B2E 50%, #8B6910 100%);
 }
 
 @theme inline {
@@ -58,12 +58,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #3d3c3a;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #D9A441;
+  background: #B88F3A;
 }
 
 /* Video player custom styles */

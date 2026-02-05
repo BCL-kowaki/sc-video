@@ -8,4 +8,7 @@ export interface Video {
   uploadDate: string;
   category?: string;
   tags?: string[];
+  /** 説明欄に表示するボタンリンク（ラベルとURL） */
+  linkLabel?: string;
+  linkUrl?: string;
 }

@@ -2,10 +2,28 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function Header() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const qFromUrl = searchParams.get("q") ?? "";
+  const [searchQuery, setSearchQuery] = useState(qFromUrl);
+
+  useEffect(() => {
+    setSearchQuery(qFromUrl);
+  }, [qFromUrl]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (q) {
+      router.push("/?q=" + encodeURIComponent(q));
+    } else {
+      router.push("/");
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--header-bg)] border-b border-[var(--border-color)]">
@@ -22,17 +40,17 @@ export default function Header() {
           />
         </Link>
 
-        {/* Search Bar - Full on mobile, 50% on PC */}
-        <div className="flex items-center flex-1 md:flex-none md:w-1/2 min-w-0">
+        {/* Search Bar - タイトル・タグで検索（静的サイトのままクライアントで絞り込み） */}
+        <form onSubmit={handleSearch} className="flex items-center flex-1 md:flex-none md:w-1/2 min-w-0">
           <div className="flex w-full">
             <input
               type="text"
-              placeholder="動画を検索"
+              placeholder="動画を検索（タイトル・タグ）"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3 md:px-4 py-1.5 md:py-2 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-l-full text-white text-sm placeholder-[var(--secondary-text)] focus:outline-none focus:border-[#D9A441]"
+              className="w-full px-3 md:px-4 py-1.5 md:py-2 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-l-full text-white text-sm placeholder-[var(--secondary-text)] focus:outline-none focus:border-[#B88F3A]"
             />
-            <button className="px-3 md:px-6 py-1.5 md:py-2 bg-[var(--card-hover)] border border-l-0 border-[var(--border-color)] rounded-r-full hover:bg-[#383838] transition-colors">
+            <button type="submit" className="px-3 md:px-6 py-1.5 md:py-2 bg-[var(--card-hover)] border border-l-0 border-[var(--border-color)] rounded-r-full hover:bg-[#383838] transition-colors">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4 md:h-5 md:w-5 text-white"
@@ -49,7 +67,7 @@ export default function Header() {
               </svg>
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </header>
   );

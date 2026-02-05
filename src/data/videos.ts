@@ -2,14 +2,30 @@ import { Video } from "@/types/video";
 
 /**
  * 動画データの管理
- * 
- * 新しい動画を追加する手順:
- * 1. 動画ファイル (.mp4) を public/videos/ に配置
- * 2. サムネイル画像 (.jpg/.png/.webp) を public/thumbnails/ に配置
- * 3. 下記の配列に新しいエントリを追加
- * 4. npm run build でビルド → デプロイ
+ *
+ * 動画をR2に置く場合:
+ * 1. R2に動画をアップロードし、Public Development URL を有効化
+ * 2. videoUrl に R2 の公開URLを指定（例: https://pub-xxx.r2.dev/bo/動画名.mp4）
+ * 3. サムネイルは public/thumbnails/ に配置するか、R2のURLを指定
+ *
+ * 動画をVercelに置く場合（300MB未満）:
+ * 1. 動画を public/videos/ に配置、videoUrl は /videos/ファイル名.mp4
+ * 2. サムネイルを public/thumbnails/ に配置
  */
 export const videos: Video[] = [
+  {
+    id: "full-comp",
+    title: "BioVault 事業説明動画（全編）",
+    description: "",
+    thumbnail: "/thumbnails/full_comp_.png",
+    videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/full_comp_.mp4",
+    duration: "53:00",
+    uploadDate: "2026-02-05",
+    category: "事業概要",
+    tags: ["事業概要"],
+    linkLabel: "資料はこちら",
+    linkUrl: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/doc.pdf",
+  },
   {
     id: "sample-1",
     title: "サンプル動画 1",

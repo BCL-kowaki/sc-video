@@ -196,7 +196,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
       {/* Loading Spinner */}
       {isLoading && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-          <div className="w-12 h-12 border-4 border-[#F2C84B] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-[#B88F3A] border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
@@ -227,10 +227,10 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
           className="absolute inset-0 flex items-center justify-center cursor-pointer"
           onClick={togglePlay}
         >
-          <div className="w-20 h-20 bg-gradient-to-br from-[#A68114] via-[#D9A441] to-[#F2C84B] rounded-full flex items-center justify-center hover:from-[#BF9A2A] hover:via-[#F2C84B] hover:to-[#F2BA52] transition-all shadow-lg shadow-[#A68114]/30">
+          <div className="w-14 h-14 bg-gradient-to-br from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] rounded-full flex items-center justify-center hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-500 ease-in-out shadow-md">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10 text-black ml-1"
+              className="h-6 w-6 text-white ml-0.5"
               viewBox="0 0 24 24"
               fill="currentColor"
             >
@@ -254,9 +254,9 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             max={duration || 100}
             value={currentTime}
             onChange={handleSeek}
-            className="w-full h-1 bg-gray-600 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#F2C84B] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
+            className="w-full h-1 bg-gray-600 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#B88F3A] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
             style={{
-              background: `linear-gradient(to right, #D9A441 ${
+              background: `linear-gradient(to right, #B88F3A ${
                 (currentTime / (duration || 1)) * 100
               }%, #4b5563 ${(currentTime / (duration || 1)) * 100}%)`,
             }}
@@ -269,7 +269,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             {/* Play/Pause */}
             <button
               onClick={togglePlay}
-              className="text-white hover:text-[#F2C84B] transition-colors"
+              className="text-white hover:text-[#B88F3A] transition-colors duration-300"
             >
               {isPlaying ? (
                 <svg
@@ -296,7 +296,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleMute}
-                className="text-white hover:text-[#F2C84B] transition-colors"
+                className="text-white hover:text-[#B88F3A] transition-colors duration-300"
               >
                 {isMuted || volume === 0 ? (
                   <svg
@@ -348,7 +348,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
             {/* Fullscreen */}
             <button
               onClick={toggleFullscreen}
-              className="text-white hover:text-[#F2C84B] transition-colors"
+              className="text-white hover:text-[#B88F3A] transition-colors duration-300"
             >
               {isFullscreen ? (
                 <svg

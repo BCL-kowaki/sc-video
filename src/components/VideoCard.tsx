@@ -69,7 +69,7 @@ export default function VideoCard({ video }: VideoCardProps) {
 
         {/* Video Info */}
         <div className="mt-3">
-          <h3 className="text-white font-medium text-sm leading-tight line-clamp-2 group-hover:text-[#F2C84B] transition-colors">
+          <h3 className="text-white font-medium text-sm leading-tight line-clamp-2 group-hover:text-[#B88F3A] transition-colors">
             {video.title}
           </h3>
           <p className="text-[var(--secondary-text)] text-xs mt-1">
