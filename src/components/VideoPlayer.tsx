@@ -141,6 +141,38 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     };
   }, []);
 
+  // スマホフルスクリーン時: 指で画面が動かないように touchmove を抑制（シークバー・ボタンは除外）
+  const preventTouchMove = (e: React.TouchEvent) => {
+    if (!isMobile || !isFullscreen) return;
+    const target = e.target as Node;
+    if (target instanceof Element && (target.closest("button") || target.closest('input[type="range"]'))) return;
+    e.preventDefault();
+  };
+  useEffect(() => {
+    if (!isMobile || !isFullscreen) return;
+    const video = videoRef.current;
+    const container = containerRef.current;
+    if (video) {
+      video.style.touchAction = "none";
+      const onTouchMove = (e: TouchEvent) => {
+        const target = e.target as Node;
+        if (target instanceof Element && (target.closest("button") || target.closest('input[type="range"]'))) return;
+        e.preventDefault();
+      };
+      video.addEventListener("touchmove", onTouchMove, { passive: false });
+      return () => {
+        video.style.touchAction = "";
+        video.removeEventListener("touchmove", onTouchMove);
+      };
+    }
+    if (container) {
+      container.style.touchAction = "none";
+      return () => {
+        container.style.touchAction = "";
+      };
+    }
+  }, [isMobile, isFullscreen]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -199,9 +231,11 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     <div
       ref={containerRef}
       className="relative bg-black aspect-video w-full rounded-[5px] overflow-hidden group"
+      style={isMobile && isFullscreen ? { touchAction: "none" } : undefined}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => isPlaying && setShowControls(false)}
       onTouchStart={handleTouchStart}
+      onTouchMove={preventTouchMove}
     >
       {/* Video Element - z-0 でコントロールの下に固定（iOSで前面に出るのを防ぐ） */}
       <video
