@@ -62,9 +62,19 @@ export default function VideoCard({ video }: VideoCardProps) {
             </div>
           )}
           {/* Duration badge */}
-          <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1.5 py-0.5 rounded font-medium">
-            {video.duration}
-          </div>
+          {!video.comingSoon && (
+            <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-1.5 py-0.5 rounded font-medium">
+              {video.duration}
+            </div>
+          )}
+          {/* Coming Soon オーバーレイ（薄い黒＋テキスト） */}
+          {video.comingSoon && (
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+              <span className="text-white text-lg font-medium tracking-wide opacity-100">
+                Coming Soon...
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Video Info */}

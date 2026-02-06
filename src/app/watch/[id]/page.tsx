@@ -25,6 +25,7 @@ export default async function WatchPage({ params }: WatchPageProps) {
   }
 
   const relatedVideos = getRelatedVideos(id, 8);
+  const isComingSoon = video.comingSoon || !video.videoUrl;
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -32,12 +33,27 @@ export default async function WatchPage({ params }: WatchPageProps) {
         <div className="flex flex-col xl:flex-row gap-6">
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Video Player */}
-            <VideoPlayer
-              src={video.videoUrl}
-              poster={video.thumbnail}
-              title={video.title}
-            />
+            {/* Video Player または Coming Soon プレースホルダー */}
+            {isComingSoon ? (
+              <div className="relative bg-black aspect-video w-full rounded-[5px] overflow-hidden">
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <span className="text-white text-2xl md:text-3xl font-medium tracking-wide">
+                    Coming Soon...
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <VideoPlayer
+                src={video.videoUrl}
+                poster={video.thumbnail}
+                title={video.title}
+              />
+            )}
 
             {/* Video Info */}
             <div className="mt-4">

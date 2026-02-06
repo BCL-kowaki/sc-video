@@ -44,9 +44,18 @@ export default function RelatedVideoCard({ video }: RelatedVideoCardProps) {
               </svg>
             </div>
           )}
-          <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 py-0.5 rounded text-[10px]">
-            {video.duration}
-          </div>
+          {!video.comingSoon && (
+            <div className="absolute bottom-1 right-1 bg-black/80 text-white text-xs px-1 py-0.5 rounded text-[10px]">
+              {video.duration}
+            </div>
+          )}
+          {video.comingSoon && (
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+              <span className="text-white text-xs font-medium tracking-wide">
+                Coming Soon...
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Info */}
