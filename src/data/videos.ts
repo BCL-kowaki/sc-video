@@ -20,10 +20,10 @@ export const videos: Video[] = [
     description: "",
     thumbnail: "/thumbnails/99_digest.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/digest.mp4",
-    duration: "03:57",
+    duration: "04:08",
     uploadDate: "2026-02-06",
     category: "事業概要",
-    tags: ["全編"],
+    tags: ["ダイジェスト"],
     linkLabel: "",
     linkUrl: "",
   },
@@ -37,46 +37,46 @@ export const videos: Video[] = [
     uploadDate: "2026-02-05",
     category: "事業概要",
     tags: ["全編"],
-    linkLabel: "資料はこちら",
+    linkLabel: "資料を確認する",
     linkUrl: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/doc.pdf",
   },
   {
-    id: "sample-1",
-    title: "①iPS細胞とは？",
+    id: "0001",
+    title: "01_iPS細胞とは？",
     description: "資料は下記ボタンからご覧ください。",
     thumbnail: "/thumbnails/01_ips.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/ips-t.mp4",
     duration: "04:41",
     uploadDate: "2026-02-06",
     category: "事業概要",
-    tags: ["項目別"],
-    linkLabel: "iPS細胞とは？",
+    tags: ["分割"],
+    linkLabel: "資料を確認する",
     linkUrl: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/ips.pdf",
   },
   {
-    id: "sample-2",
-    title: "②技術提携企業詳細",
+    id: "0002",
+    title: "02_技術提携企業詳細",
     description: "資料は下記ボタンからご覧ください。",
     thumbnail: "/thumbnails/02_ice.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/ice-t.mp4",
     duration: "03:28",
     uploadDate: "2026-02-06",
     category: "事業概要",
-    tags: ["項目別"],
-    linkLabel: "技術提携企業詳細",
+    tags: ["分割"],
+    linkLabel: "資料を確認する",
     linkUrl: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/ice.pdf",
   },
   {
-    id: "sample-3",
-    title: "③ビジネスモデル概要",
+    id: "0003",
+    title: "03_ビジネスモデル概要",
     description: "資料は下記ボタンからご覧ください。",
     thumbnail: "/thumbnails/03_bm.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/bm-t.mp4",
     duration: "10:05",
     uploadDate: "2026-02-06",
     category: "事業概要",
-    tags: ["項目別"],
-    linkLabel: "ビジネスモデル概要",
+    tags: ["分割"],
+    linkLabel: "資料を確認する",
     linkUrl: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/bm.pdf",
   },
 ];
@@ -106,22 +106,23 @@ export function getAllCategories(): string[] {
 }
 
 /**
- * 関連動画を取得（同じカテゴリの動画を返す）
+ * タグで動画をフィルタ
  */
-export function getRelatedVideos(currentVideoId: string, limit: number = 5): Video[] {
-  const currentVideo = getVideoById(currentVideoId);
-  if (!currentVideo) return videos.slice(0, limit);
+export function getVideosByTag(tag: string): Video[] {
+  return videos.filter((v) => v.tags?.includes(tag));
+}
 
-  const related = videos
-    .filter((video) => video.id !== currentVideoId)
-    .filter((video) => video.category === currentVideo.category);
+/** ダイジェスト動画（1本） */
+export function getDigestVideo(): Video | undefined {
+  return videos.find((v) => v.tags?.includes("ダイジェスト"));
+}
 
-  if (related.length < limit) {
-    const others = videos
-      .filter((video) => video.id !== currentVideoId && video.category !== currentVideo.category)
-      .slice(0, limit - related.length);
-    return [...related, ...others];
-  }
+/** 全編動画（1本） */
+export function getFullVideo(): Video | undefined {
+  return videos.find((v) => v.id === "full" || (v.tags?.includes("全編") && !v.tags?.includes("ダイジェスト")));
+}
 
-  return related.slice(0, limit);
+/** 分割動画（小分けの動画一覧） */
+export function getSplitVideos(): Video[] {
+  return getVideosByTag("分割");
 }

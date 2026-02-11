@@ -36,7 +36,12 @@ export default function RootLayout({
         <Suspense fallback={<HeaderFallback />}>
           <Header />
         </Suspense>
-        <main className="pt-16 md:pt-20">{children}</main>
+        <main className="pt-12 md:pt-20">{children}</main>
+        <footer className="border-t border-[var(--border-color)] py-6">
+          <p className="text-center text-[var(--secondary-text)] text-xs">
+            &copy; 株式会社SCPP All rights reserved.
+          </p>
+        </footer>
       </body>
     </html>
   );

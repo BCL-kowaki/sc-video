@@ -40,6 +40,15 @@ export default function Header() {
           />
         </Link>
 
+        <a
+          href="https://sc-project-partners.co.jp/form/mail/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-4 py-1.5 md:px-5 md:py-2 text-xs md:text-sm font-medium text-white bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] rounded-full hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-300 shrink-0"
+        >
+          お問い合わせ
+        </a>
+
         {/* Search Bar - 一旦非表示 */}
         <form onSubmit={handleSearch} className="hidden">
           <div className="flex w-full">
