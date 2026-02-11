@@ -40,8 +40,8 @@ export default function Header() {
           />
         </Link>
 
-        {/* Search Bar - タイトル・タグで検索（静的サイトのままクライアントで絞り込み） */}
-        <form onSubmit={handleSearch} className="flex items-center flex-1 md:flex-none md:w-1/2 min-w-0">
+        {/* Search Bar - 一旦非表示 */}
+        <form onSubmit={handleSearch} className="hidden">
           <div className="flex w-full">
             <input
               type="text"
