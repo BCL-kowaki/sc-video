@@ -59,7 +59,7 @@ export const videos: Video[] = [
     description: "自身の細胞を将来の健康や医療に活かす「細胞資産」の考え方を説明します。なぜいま細胞を保存することが価値を持つのか、その背景とメリットをお伝えしています。",
     thumbnail: "/thumbnails/02.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/cellasset-tt.mp4",
-    duration: "",
+    duration: "08:00",
     uploadDate: "2026-02-06",
     category: "事業概要",
     tags: ["分割"],
