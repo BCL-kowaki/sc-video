@@ -25,7 +25,7 @@ export default function DocsPage() {
             <div className="flex flex-col gap-0">
               {fullDoc && (
                 <>
-                  <h3 className="text-white text-sm font-semibold mb-2">全編資料</h3>
+                  <h3 className="text-white text-sm md:text-[18px] font-semibold mb-2">全編資料</h3>
                   <div className="flex flex-col gap-1">
                     <DocListRow key={fullDoc.id} doc={fullDoc} />
                   </div>
@@ -34,7 +34,7 @@ export default function DocsPage() {
               )}
               {splitDocs.length > 0 && (
                 <>
-                  <h3 className="text-white text-sm font-semibold mb-2">分割資料</h3>
+                  <h3 className="text-white text-sm md:text-[18px] font-semibold mb-2">分割資料</h3>
                   <p className="text-white text-[12px] md:text-sm mb-3 text-left">
                     全編資料を分割した各項目のPDFを用意しております。確認されたい資料をクリックしてご覧ください。
                   </p>
