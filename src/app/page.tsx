@@ -1,4 +1,4 @@
-import VideoPlayer from "@/components/VideoPlayer";
+import HomeDigestPlayer from "@/components/HomeDigestPlayer";
 import { getDigestVideo } from "@/data/videos";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
         </h2>
 
         <div className="max-w-[900px] mx-auto mb-6">
-          <VideoPlayer
+          <HomeDigestPlayer
             src={digest.videoUrl}
             poster={digest.thumbnail}
             title={digest.title}

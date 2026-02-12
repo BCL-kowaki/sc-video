@@ -6,6 +6,8 @@ interface VideoPlayerProps {
   src: string;
   poster?: string;
   title: string;
+  /** 外部からの訪問時など、自動再生したい場合は true。音声付きで試し、ブロックされたらミュートで再生 */
+  autoplay?: boolean;
 }
 
 function isMobileDevice() {
@@ -13,7 +15,7 @@ function isMobileDevice() {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
 }
 
-export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
+export default function VideoPlayer({ src, poster, title, autoplay = false }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -125,6 +127,19 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   useEffect(() => {
     setIsMobile(isMobileDevice());
   }, []);
+
+  // 外部訪問時用: autoplay のとき音声付きで再生を試し、ブロックされたらミュートで再生
+  useEffect(() => {
+    if (!autoplay || !videoRef.current) return;
+    const v = videoRef.current;
+    v.play()
+      .then(() => setIsPlaying(true))
+      .catch(() => {
+        v.muted = true;
+        setIsMuted(true);
+        v.play().then(() => setIsPlaying(true)).catch(() => {});
+      });
+  }, [autoplay]);
 
   // Update fullscreen state（標準 + iOS webkit）
   useEffect(() => {
@@ -300,6 +315,7 @@ export default function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         onError={() => setError(true)}
         preload="metadata"
         playsInline
+        muted={isMuted}
       >
         <source src={src} type="video/mp4" />
         お使いのブラウザは動画再生に対応していません。
