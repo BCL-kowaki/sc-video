@@ -10,7 +10,7 @@ interface DocListRowProps {
 
 /** 【〇〇】で始まるタイトルを [【〇〇】, 残り] に分割。スマホで【〇〇】の直後に改行するため */
 function splitTitleForMobile(title: string): { prefix: string; rest: string } | null {
-  const match = title.match(/^(\【[^】]*\】)\s*(.*)$/s);
+  const match = title.match(/^(\【[^】]*\】)\s*(.*)$/);
   if (!match || !match[2]) return null;
   return { prefix: match[1], rest: match[2].trim() };
 }
