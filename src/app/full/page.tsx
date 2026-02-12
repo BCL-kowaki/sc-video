@@ -15,7 +15,7 @@ export default function FullPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <div className="max-w-[960px] mx-auto px-4 pt-2 pb-8">
+      <div className="max-w-[960px] mx-auto px-4 pt-4 pb-8">
         {/* ホームと同じ見出し構成（全編用） */}
         <h3
           className="text-white text-[14px] md:text-base tracking-[0.25em] uppercase text-center mb-2"
@@ -47,25 +47,25 @@ export default function FullPage() {
 
         {/* 動画の説明文 */}
         <section className="max-w-[640px] mx-auto mb-6">
-          <p className="text-white/95 text-base md:text-lg leading-relaxed text-left">
+          <p className="text-white/95 text-[14px] leading-relaxed text-left">
             {description}
           </p>
         </section>
 
-        {/* 説明資料一覧・動画一覧へのボタン */}
+        {/* 説明資料はこちら・分割動画へのボタン */}
         <section className="max-w-[560px] mx-auto flex flex-col sm:flex-row gap-3 justify-center items-center">
           <a
             href="/docs/"
             className="inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-white font-bold text-base bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-300 shadow-lg hover:shadow-[#B88F3A]/25 hover:scale-[1.02] w-full sm:w-auto"
           >
-            説明資料一覧
+            説明資料はこちら
             <span className="text-white" aria-hidden>&gt;</span>
           </a>
           <a
             href="/top/"
-            className="inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-white font-bold text-base bg-[var(--card-bg)] border border-[var(--border-color)] hover:border-[#B88F3A] hover:text-[#B88F3A] transition-all duration-300 w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-white font-bold text-base bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-300 shadow-lg hover:shadow-[#B88F3A]/25 hover:scale-[1.02] w-full sm:w-auto"
           >
-            動画一覧
+            分割動画
             <span className="text-white" aria-hidden>&gt;</span>
           </a>
         </section>

@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <div className="max-w-[960px] mx-auto px-4 pt-2 pb-8">
+      <div className="max-w-[960px] mx-auto px-4 pt-4 pb-8">
         <h3 className="text-white text-[14px] md:text-base tracking-[0.25em] uppercase text-center mb-2" style={{ fontWeight: 400 }}>
           DIGEST VIDEO
         </h3>
@@ -33,13 +33,13 @@ export default function Home() {
           />
         </div>
 
-        <p className="text-white/95 text-base md:text-lg leading-relaxed text-left mb-4 max-w-[640px] mx-auto">
+        <p className="text-white/95 text-[14px] leading-relaxed text-left mb-4 max-w-[640px] mx-auto">
           革命的技術で未来の健康と資産の在り方を変える。iPSオーダーメイドメンバーシップの概要をダイジェストでお届けしています。
         </p>
 
         {/* ダイジェスト視聴後 → 全編動画への誘導 */}
         <section className="max-w-[560px] mx-auto text-center">
-          <p className="text-white/90 text-sm md:text-base mb-6">
+          <p className="text-white/90 text-[12px] mb-6">
             続きは全編動画（約53分）で詳しくご説明しています。
           </p>
           <a

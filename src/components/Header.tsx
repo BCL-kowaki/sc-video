@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--header-bg)] border-b border-[var(--border-color)]">
-      <div className="flex items-center justify-between gap-3 px-3 md:px-6 py-[10px] md:py-[15px]">
+      <div className="max-w-[1200px] mx-auto flex items-center justify-between gap-3 px-3 md:px-6 py-[10px] md:py-[15px]">
         {/* Logo - public/logo.png に画像を配置してください */}
         <a href="/" className="flex items-center shrink-0">
           <Image

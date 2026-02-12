@@ -18,8 +18,8 @@ export default function VideoListRow({ video }: VideoListRowProps) {
 
   return (
     <a href={`/watch/${video.id}/`} className="block group">
-      <div className="flex gap-4 p-2 rounded-lg hover:bg-[var(--card-bg)]/50 transition-colors">
-        <div className="relative w-[200px] sm:w-[280px] md:w-[320px] shrink-0 aspect-video rounded overflow-hidden bg-[var(--card-bg)]">
+      <div className="flex gap-3 md:gap-4 py-2 rounded-lg hover:bg-[var(--card-bg)]/50 transition-colors">
+        <div className="relative w-1/2 min-w-0 shrink-0 md:w-[320px] aspect-video rounded overflow-hidden bg-[var(--card-bg)]">
           {!imageError ? (
             <Image
               src={video.thumbnail}
@@ -47,11 +47,11 @@ export default function VideoListRow({ video }: VideoListRowProps) {
             </div>
           )}
         </div>
-        <div className="flex-1 min-w-0 py-1">
-          <h3 className="text-white font-semibold text-base md:text-lg line-clamp-2 group-hover:text-[#B88F3A] transition-colors">
+        <div className="w-1/2 min-w-0 md:flex-1 py-1">
+          <h3 className="text-[#fff] font-semibold text-[14px] md:text-lg line-clamp-2 group-hover:text-[#B88F3A] transition-colors">
             {video.title}
           </h3>
-          <p className="text-[var(--secondary-text)] text-sm mt-1 line-clamp-2 sm:line-clamp-3">
+          <p className="text-[#fff] text-[12px] md:text-sm mt-1 line-clamp-2 sm:line-clamp-3">
             {excerpt}
           </p>
         </div>

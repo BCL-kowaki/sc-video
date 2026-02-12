@@ -42,7 +42,7 @@ export const videos: Video[] = [
   },
   {
     id: "v001",
-    title: "01｜iPS細胞とは？",
+    title: "【分割01】iPS細胞とは？",
     description: "ノーベル賞技術として知られるiPS細胞の基礎を解説します。再生医療や創薬、当社サービスとの関わりについて、分かりやすくお伝えしています。",
     thumbnail: "/thumbnails/01.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/ips-t.mp4",
@@ -55,7 +55,7 @@ export const videos: Video[] = [
   },
   {
     id: "v002",
-    title: "02｜細胞資産とは？",
+    title: "【分割02】細胞資産とは？",
     description: "自身の細胞を将来の健康や医療に活かす「細胞資産」の考え方を説明します。なぜいま細胞を保存することが価値を持つのか、その背景とメリットをお伝えしています。",
     thumbnail: "/thumbnails/02.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/cellasset-tt.mp4",
@@ -68,7 +68,7 @@ export const videos: Video[] = [
   },
   {
     id: "v003",
-    title: "03｜技術提携企業概要",
+    title: "【分割03】技術提携企業概要",
     description: "当社が連携する技術提携企業の概要を紹介します。iPS細胞・再生医療分野での実績と、BioVaultサービスを支える技術基盤について解説しています。",
     thumbnail: "/thumbnails/03.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/ice-t.mp4",
@@ -81,7 +81,7 @@ export const videos: Video[] = [
   },
   {
     id: "v004",
-    title: "04｜サービス内容",
+    title: "【分割04】サービス内容",
     description: "BioVaultのサービス内容を詳しくご説明します。細胞の採取・保管の流れ、メンバーシップの内容、ご利用いただける検査やオプションなど、約18分でお伝えしています。",
     thumbnail: "/thumbnails/04.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/service-tt.mp4",
@@ -94,7 +94,7 @@ export const videos: Video[] = [
   },
   {
     id: "v005",
-    title: "05｜事業提携企業",
+    title: "【分割05】事業提携企業",
     description: "当社と事業提携している企業の概要を紹介します。各社の強みと連携内容により、お客様に安心・高品質なサービスをお届けする体制についてお伝えしています。",
     thumbnail: "/thumbnails/05.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/bp-tt.mp4",
