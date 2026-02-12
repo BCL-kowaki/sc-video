@@ -33,13 +33,13 @@ export default function Home() {
           />
         </div>
 
-        <p className="text-white/95 text-base md:text-lg leading-relaxed text-center mb-6 max-w-[640px] mx-auto">
+        <p className="text-white/95 text-base md:text-lg leading-relaxed text-left mb-4 max-w-[640px] mx-auto">
           革命的技術で未来の健康と資産の在り方を変える。iPSオーダーメイドメンバーシップの概要をダイジェストでお届けしています。
         </p>
 
         {/* ダイジェスト視聴後 → 全編動画への誘導 */}
         <section className="max-w-[560px] mx-auto text-center">
-          <p className="text-white/90 text-sm md:text-base mb-4">
+          <p className="text-white/90 text-sm md:text-base mb-6">
             続きは全編動画（約53分）で詳しくご説明しています。
           </p>
           <a
@@ -49,7 +49,7 @@ export default function Home() {
             全編動画を見る
             <span className="text-white" aria-hidden>&gt;</span>
           </a>
-          <p className="text-[var(--secondary-text)] text-xs mt-3">
+          <p className="text-white text-xs mt-6">
             動画一覧・資料は上部メニューからご利用ください。
           </p>
         </section>

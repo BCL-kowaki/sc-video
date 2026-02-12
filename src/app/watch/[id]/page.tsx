@@ -44,9 +44,8 @@ export default async function WatchPage({ params }: WatchPageProps) {
         <h1 className="mt-4 text-xl font-bold text-white">{video.title}</h1>
 
         {/* 説明文を表示する箇所（videos.ts の description を編集で変更可能） */}
-        <section className="mt-6 max-w-[720px]">
-          <h2 className="text-[#B88F3A] text-sm font-semibold tracking-wider uppercase mb-2">説明文</h2>
-          <div className="rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] p-4">
+        <section className="mt-3 max-w-[720px]">
+          <div>
             {video.description ? (
               <p className="text-white/95 text-base leading-relaxed whitespace-pre-wrap">{video.description}</p>
             ) : (

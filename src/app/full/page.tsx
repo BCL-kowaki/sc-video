@@ -47,7 +47,7 @@ export default function FullPage() {
 
         {/* 動画の説明文 */}
         <section className="max-w-[640px] mx-auto mb-6">
-          <p className="text-white/95 text-base md:text-lg leading-relaxed text-center">
+          <p className="text-white/95 text-base md:text-lg leading-relaxed text-left">
             {description}
           </p>
         </section>

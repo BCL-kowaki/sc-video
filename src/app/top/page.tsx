@@ -61,7 +61,7 @@ function TopPageContent() {
             )
           )}
         </div>
-        <p className="text-[var(--secondary-text)] text-sm mb-6 text-left">
+        <p className="text-white text-sm mb-4 text-left">
           確認されたい動画をクリックして、詳細をご確認ください。
         </p>
 
@@ -81,7 +81,7 @@ function TopPageContent() {
                 <VideoPlayer src={full.videoUrl} poster={full.thumbnail} title={full.title} />
               </div>
               <div className="max-w-[640px] mx-auto mb-6">
-                <p className="text-white/95 text-base md:text-lg leading-relaxed text-center">{desc}</p>
+                <p className="text-white/95 text-base md:text-lg leading-relaxed text-left">{desc}</p>
               </div>
               <div className="max-w-[560px] mx-auto flex flex-col sm:flex-row gap-3 justify-center items-center">
                 <a href="/docs/" className="inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-white font-bold text-base bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-300 shadow-lg hover:shadow-[#B88F3A]/25 hover:scale-[1.02] w-full sm:w-auto">
@@ -109,7 +109,7 @@ function TopPageContent() {
               <div className="max-w-[900px] mx-auto mb-6">
                 <VideoPlayer src={digest.videoUrl} poster={digest.thumbnail} title={digest.title} />
               </div>
-              <p className="text-white/95 text-base md:text-lg leading-relaxed text-center mb-6 max-w-[640px] mx-auto">
+              <p className="text-white/95 text-base md:text-lg leading-relaxed text-left mb-6 max-w-[640px] mx-auto">
                 革命的技術で未来の健康と資産の在り方を変える。iPSオーダーメイドメンバーシップの概要をダイジェストでお届けしています。
               </p>
               <section className="max-w-[560px] mx-auto text-center">
@@ -117,7 +117,7 @@ function TopPageContent() {
                 <a href="/full/" className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-xl text-white font-bold text-base md:text-lg bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-300 shadow-lg hover:shadow-[#B88F3A]/25 hover:scale-[1.02]">
                   全編動画を見る <span className="text-white" aria-hidden>&gt;</span>
                 </a>
-                <p className="text-[var(--secondary-text)] text-xs mt-3">動画一覧・資料は上部メニューからご利用ください。</p>
+                <p className="text-white text-xs mt-6">動画一覧・資料は上部メニューからご利用ください。</p>
               </section>
             </section>
           );
