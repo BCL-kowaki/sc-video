@@ -107,7 +107,7 @@ export const videos: Video[] = [
   },
   {
     id: "v006",
-    title: "06｜ビジネスモデル概要",
+    title: "【分割06】ビジネスモデル概要",
     description: "BioVaultのビジネスモデルと収益の仕組みを解説します。メンバーシップ料金体系、今後の展開や成長戦略について、約10分で分かりやすくご説明しています。",
     thumbnail: "/thumbnails/06.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/bm-t.mp4",
@@ -120,7 +120,7 @@ export const videos: Video[] = [
   },
   {
     id: "v007",
-    title: "07｜BioVault運営会社",
+    title: "【分割07】BioVault運営会社",
     description: "BioVaultを運営する会社の概要をご紹介します。企業理念、沿革、およびお客様に安心してご利用いただくための体制についてお伝えしています。",
     thumbnail: "/thumbnails/07.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/about-tt.mp4",

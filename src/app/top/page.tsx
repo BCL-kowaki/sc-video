@@ -149,7 +149,7 @@ function TopPageContent() {
                   <div className="flex flex-col gap-0">
                     {digest.length > 0 && (
                       <>
-                        <h3 className="text-white text-sm md:text-[18px] font-semibold mb-2">ダイジェスト</h3>
+                        <h3 className="text-[#B88F3A] text-sm md:text-[18px] font-semibold mb-2">ダイジェスト</h3>
                         <div className="flex flex-col gap-1">
                           {digest.map((v) => <VideoListRow key={v.id} video={v} />)}
                         </div>
@@ -158,7 +158,7 @@ function TopPageContent() {
                     )}
                     {full.length > 0 && (
                       <>
-                        <h3 className="text-white text-sm md:text-[18px] font-semibold mb-2">全編動画</h3>
+                        <h3 className="text-[#B88F3A] text-sm md:text-[18px] font-semibold mb-2">全編動画</h3>
                         <div className="flex flex-col gap-1">
                           {full.map((v) => <VideoListRow key={v.id} video={v} />)}
                         </div>
@@ -167,7 +167,7 @@ function TopPageContent() {
                     )}
                     {split.length > 0 && (
                       <>
-                        <h3 className="text-white text-sm md:text-[18px] font-semibold mb-2">分割動画</h3>
+                        <h3 className="text-[#B88F3A] text-sm md:text-[18px] font-semibold mb-2">分割動画</h3>
                         <p className="text-white text-[12px] md:text-sm mb-3 text-left">
                           全編動画を分割した各項目動画を用意しております。確認されたい項目をクリックしてご視聴ください。
                         </p>
