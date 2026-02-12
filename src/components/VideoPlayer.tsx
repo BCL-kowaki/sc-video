@@ -6,7 +6,7 @@ interface VideoPlayerProps {
   src: string;
   poster?: string;
   title: string;
-  /** 外部からの訪問時など、自動再生したい場合は true。音声付きで試し、ブロックされたらミュートで再生 */
+  /** 外部からの訪問時など、自動再生したい場合は true。音声付きで再生を試行（ブロック時は自動再生しない） */
   autoplay?: boolean;
 }
 
@@ -128,10 +128,12 @@ export default function VideoPlayer({ src, poster, title, autoplay = false }: Vi
     setIsMobile(isMobileDevice());
   }, []);
 
-  // 外部訪問時用: autoplay のとき音声付きで再生を試し、ブロックされたらミュートで再生
+  // 外部訪問時用: まず音声付きで再生を試行し、ブロックされたらミュートで自動再生（ユーザーがミュート解除で音声可能）
   useEffect(() => {
     if (!autoplay || !videoRef.current) return;
     const v = videoRef.current;
+    v.muted = false;
+    v.volume = 1;
     v.play()
       .then(() => setIsPlaying(true))
       .catch(() => {
