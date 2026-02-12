@@ -10,8 +10,16 @@ interface VideoListRowProps {
 
 const DESCRIPTION_MAX = 80;
 
+/** 【〇〇】で始まるタイトルを [【〇〇】, 残り] に分割。スマホで【〇〇】の直後に改行するため */
+function splitTitleForMobile(title: string): { prefix: string; rest: string } | null {
+  const match = title.match(/^(\【[^】]*\】)\s*(.*)$/s);
+  if (!match || !match[2]) return null;
+  return { prefix: match[1], rest: match[2].trim() };
+}
+
 export default function VideoListRow({ video }: VideoListRowProps) {
   const [imageError, setImageError] = useState(false);
+  const titleParts = splitTitleForMobile(video.title);
   const excerpt = video.description
     ? video.description.slice(0, DESCRIPTION_MAX) + (video.description.length > DESCRIPTION_MAX ? "…" : "")
     : "動画の説明はありません。";
@@ -49,7 +57,14 @@ export default function VideoListRow({ video }: VideoListRowProps) {
         </div>
         <div className="w-1/2 min-w-0 md:flex-1 py-1">
           <h3 className="text-[#fff] font-semibold text-[14px] md:text-lg line-clamp-2 group-hover:text-[#B88F3A] transition-colors">
-            {video.title}
+            {titleParts ? (
+              <>
+                <span className="block md:inline">{titleParts.prefix}</span>
+                {titleParts.rest && <span className="block md:inline">{titleParts.rest}</span>}
+              </>
+            ) : (
+              video.title
+            )}
           </h3>
           <p className="text-[#fff] text-[12px] md:text-sm mt-1 line-clamp-2 sm:line-clamp-3">
             {excerpt}

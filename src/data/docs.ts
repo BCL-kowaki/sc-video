@@ -7,7 +7,7 @@ export const docs: Doc[] = [
   {
     id: "d000",
     title: "全編資料",
-    description: "全編スライドを一冊にまとめたPDF。",
+    description: "BioVaultの事業概要からiPS細胞の解説まで本事業の魅力のすべてを網羅。",
     cover: "/thumbnails/doc/00.png",
     url: `${BASE}/doc.pdf`,
   },

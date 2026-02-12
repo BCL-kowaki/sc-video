@@ -8,8 +8,16 @@ interface DocListRowProps {
   doc: Doc;
 }
 
+/** 【〇〇】で始まるタイトルを [【〇〇】, 残り] に分割。スマホで【〇〇】の直後に改行するため */
+function splitTitleForMobile(title: string): { prefix: string; rest: string } | null {
+  const match = title.match(/^(\【[^】]*\】)\s*(.*)$/s);
+  if (!match || !match[2]) return null;
+  return { prefix: match[1], rest: match[2].trim() };
+}
+
 export default function DocListRow({ doc }: DocListRowProps) {
   const [imageError, setImageError] = useState(false);
+  const titleParts = splitTitleForMobile(doc.title);
 
   return (
     <a
@@ -42,7 +50,14 @@ export default function DocListRow({ doc }: DocListRowProps) {
         </div>
         <div className="w-1/2 min-w-0 md:flex-1 py-1">
           <h3 className="text-[#fff] font-semibold text-[14px] md:text-lg line-clamp-2 group-hover:text-[#B88F3A] transition-colors">
-            {doc.title}
+            {titleParts ? (
+              <>
+                <span className="block md:inline">{titleParts.prefix}</span>
+                {titleParts.rest && <span className="block md:inline">{titleParts.rest}</span>}
+              </>
+            ) : (
+              doc.title
+            )}
           </h3>
           <p className="text-[#fff] text-[12px] md:text-sm mt-1 leading-relaxed whitespace-pre-wrap">
             {doc.description}
