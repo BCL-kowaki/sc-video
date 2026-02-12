@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
@@ -22,7 +20,7 @@ export default function NotFound() {
         <p className="text-[var(--secondary-text)] mb-6">
           お探しのページは見つかりませんでした
         </p>
-        <Link
+        <a
           href="/"
           className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#8B6910] via-[#9A7B2E] to-[#B88F3A] text-white rounded-full font-medium hover:from-[#B88F3A] hover:via-[#9A7B2E] hover:to-[#8B6910] transition-all duration-500 ease-in-out"
         >
@@ -39,7 +37,7 @@ export default function NotFound() {
             />
           </svg>
           ホームに戻る
-        </Link>
+        </a>
       </div>
     </div>
   );

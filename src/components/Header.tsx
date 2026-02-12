@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -29,7 +28,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--header-bg)] border-b border-[var(--border-color)]">
       <div className="flex items-center justify-between gap-3 px-3 md:px-6 py-[10px] md:py-[15px]">
         {/* Logo - public/logo.png に画像を配置してください */}
-        <Link href="/" className="flex items-center shrink-0">
+        <a href="/" className="flex items-center shrink-0">
           <Image
             src="/logo.png"
             alt="Logo"
@@ -38,7 +37,7 @@ export default function Header() {
             className="w-[100px] md:w-[120px] h-auto object-contain"
             priority
           />
-        </Link>
+        </a>
 
         <a
           href="https://sc-project-partners.co.jp/form/mail/"

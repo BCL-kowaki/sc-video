@@ -17,7 +17,7 @@ export const videos: Video[] = [
   {
     id: "digest",
     title: "【ダイジェスト】BioVault事業説明",
-    description: "",
+    description: "革命的技術で未来の健康と資産の在り方を変える、iPSオーダーメイドメンバーシップの概要を約4分でお届けするダイジェスト版です。事業の全体像と魅力をコンパクトにまとめています。",
     thumbnail: "/thumbnails/99_digest.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/digest.mp4",
     duration: "04:08",
@@ -30,7 +30,7 @@ export const videos: Video[] = [
   {
     id: "full",
     title: "【全編動画】BioVault事業説明",
-    description: "",
+    description: "当社の事業概要を全編（約53分）で解説しています。iPS細胞の基礎、細胞資産の考え方、技術提携・サービス内容・事業提携・ビジネスモデル、運営会社まで、説明資料に沿って詳しくご説明しています。詳細なスライドは説明資料一覧からご確認ください。",
     thumbnail: "/thumbnails/00_full.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/full_comp_.mp4",
     duration: "53:00",
@@ -41,10 +41,10 @@ export const videos: Video[] = [
     linkUrl: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/doc.pdf",
   },
   {
-    id: "0001",
+    id: "v001",
     title: "01_iPS細胞とは？",
-    description: "",
-    thumbnail: "/thumbnails/01_ips.png",
+    description: "ノーベル賞技術として知られるiPS細胞の基礎を解説します。再生医療や創薬、当社サービスとの関わりについて、分かりやすくお伝えしています。",
+    thumbnail: "/thumbnails/01.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/ips-t.mp4",
     duration: "04:41",
     uploadDate: "2026-02-06",
@@ -54,10 +54,10 @@ export const videos: Video[] = [
     linkUrl: "",
   },
   {
-    id: "0002",
+    id: "v002",
     title: "02_細胞資産とは？",
-    description: "08:00",
-    thumbnail: "/thumbnails/02_cellasset.png",
+    description: "自身の細胞を将来の健康や医療に活かす「細胞資産」の考え方を説明します。なぜいま細胞を保存することが価値を持つのか、その背景とメリットをお伝えしています。",
+    thumbnail: "/thumbnails/02.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/cellasset-tt.mp4",
     duration: "",
     uploadDate: "2026-02-06",
@@ -67,10 +67,10 @@ export const videos: Video[] = [
     linkUrl: "",
   },
   {
-    id: "0003",
+    id: "v003",
     title: "03_技術提携企業概要",
-    description: "",
-    thumbnail: "/thumbnails/03_ice.png",
+    description: "当社が連携する技術提携企業の概要を紹介します。iPS細胞・再生医療分野での実績と、BioVaultサービスを支える技術基盤について解説しています。",
+    thumbnail: "/thumbnails/03.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/ice-t.mp4",
     duration: "03:27",
     uploadDate: "2026-02-06",
@@ -80,10 +80,10 @@ export const videos: Video[] = [
     linkUrl: "",
   },
   {
-    id: "0004",
+    id: "v004",
     title: "04_サービス内容",
-    description: "",
-    thumbnail: "/thumbnails/04_service.png",
+    description: "BioVaultのサービス内容を詳しくご説明します。細胞の採取・保管の流れ、メンバーシップの内容、ご利用いただける検査やオプションなど、約18分でお伝えしています。",
+    thumbnail: "/thumbnails/04.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/service-tt.mp4",
     duration: "17:52",
     uploadDate: "2026-02-06",
@@ -93,10 +93,10 @@ export const videos: Video[] = [
     linkUrl: "",
   },
   {
-    id: "0005",
+    id: "v005",
     title: "05_事業提携企業",
-    description: "",
-    thumbnail: "/thumbnails/05_bp.png",
+    description: "当社と事業提携している企業の概要を紹介します。各社の強みと連携内容により、お客様に安心・高品質なサービスをお届けする体制についてお伝えしています。",
+    thumbnail: "/thumbnails/05.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/bp-tt.mp4",
     duration: "04:16",
     uploadDate: "2026-02-06",
@@ -106,10 +106,10 @@ export const videos: Video[] = [
     linkUrl: "",
   },
   {
-    id: "0006",
+    id: "v006",
     title: "06_ビジネスモデル概要",
-    description: "",
-    thumbnail: "/thumbnails/06_bm.png",
+    description: "BioVaultのビジネスモデルと収益の仕組みを解説します。メンバーシップ料金体系、今後の展開や成長戦略について、約10分で分かりやすくご説明しています。",
+    thumbnail: "/thumbnails/06.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/bm-t.mp4",
     duration: "10:04",
     uploadDate: "2026-02-06",
@@ -119,10 +119,10 @@ export const videos: Video[] = [
     linkUrl: "",
   },
   {
-    id: "0007",
+    id: "v007",
     title: "07_BioVault運営会社",
-    description: "",
-    thumbnail: "/thumbnails/07_about.png",
+    description: "BioVaultを運営する会社の概要をご紹介します。企業理念、沿革、およびお客様に安心してご利用いただくための体制についてお伝えしています。",
+    thumbnail: "/thumbnails/07.png",
     videoUrl: "https://pub-124d8dcf6aa94a1cbbbaafb724e4a831.r2.dev/bo/about-tt.mp4",
     duration: "05:18",
     uploadDate: "2026-02-06",
@@ -177,4 +177,12 @@ export function getFullVideo(): Video | undefined {
 /** 分割動画（小分けの動画一覧） */
 export function getSplitVideos(): Video[] {
   return getVideosByTag("分割");
+}
+
+/** 表示順: ダイジェスト → 全編 → 分割動画（ID順） */
+export function getVideosInDisplayOrder(): Video[] {
+  const digest = videos.find((v) => v.tags?.includes("ダイジェスト"));
+  const full = videos.find((v) => v.tags?.includes("全編") && v.id !== "digest");
+  const split = getVideosByTag("分割");
+  return [digest, full, ...split].filter((v): v is Video => !!v);
 }

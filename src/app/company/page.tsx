@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import NavigationTabs from "@/components/NavigationTabs";
 
 const companyInfo = [
   { label: "会社名", value: "株式会社SCPP" },
@@ -16,11 +15,6 @@ const companyInfo = [
 export default function CompanyPage() {
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      {/* ── ナビゲーションタブ（ヘッダー直下） ── */}
-      <div className="max-w-[960px] mx-auto px-4 pt-4 pb-2">
-        <NavigationTabs activeId="company" />
-      </div>
-
       {/* ── メインビジュアル ── */}
       <section className="relative w-full h-[180px] md:h-[280px] overflow-hidden">
         <Image

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
+import CategoryNavWrapper from "@/components/CategoryNavWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,7 +37,14 @@ export default function RootLayout({
         <Suspense fallback={<HeaderFallback />}>
           <Header />
         </Suspense>
-        <main className="pt-12 md:pt-20">{children}</main>
+        <main className="pt-12 md:pt-20">
+          <div className="max-w-[960px] mx-auto px-4 pt-2">
+            <Suspense fallback={<div className="h-12 border-b border-[var(--border-color)]" />}>
+              <CategoryNavWrapper />
+            </Suspense>
+          </div>
+          {children}
+        </main>
         <footer className="border-t border-[var(--border-color)] py-6">
           <p className="text-center text-[var(--secondary-text)] text-xs">
             &copy; 株式会社SCPP All rights reserved.

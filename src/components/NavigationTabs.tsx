@@ -11,7 +11,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { id: "full", label: "全編", href: "/top/" },
-  { id: "digest", label: "ダイジェスト", href: "/top/?tab=digest" },
+  { id: "digest", label: "ダイジェスト", href: "/" },
   { id: "split", label: "分割動画", href: "/top/?tab=split" },
   { id: "docs", label: "資料", href: "https://sc-project-partners.co.jp/files/bonds/biovault/bo/doc.pdf", external: true },
   { id: "company", label: "会社案内", href: "/company/" },
@@ -31,7 +31,7 @@ export default function NavigationTabs({ activeId, onTabClick }: NavigationTabsP
   const baseStyle =
     "px-4 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-300";
 
-  const videoTabIds = ["full", "digest", "split"];
+  const videoTabIds = ["full", "split"];
 
   return (
     <div className="flex gap-3 mb-3 overflow-x-auto pb-2 scrollbar-hide">
@@ -53,7 +53,20 @@ export default function NavigationTabs({ activeId, onTabClick }: NavigationTabsP
           );
         }
 
-        // 動画タブで onTabClick が渡されている場合はボタンとして動作
+        // ダイジェストは常にホーム（/）へリンク
+        if (item.id === "digest") {
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              className={`${baseStyle} ${isActive ? activeStyle : inactiveStyle}`}
+            >
+              {item.label}
+            </Link>
+          );
+        }
+
+        // 全編・分割動画で onTabClick が渡されている場合はボタンとして動作（/top/ のみ）
         if (videoTabIds.includes(item.id) && onTabClick) {
           return (
             <button
